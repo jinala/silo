@@ -96,6 +96,7 @@ public:
   typedef Hash hasher;
   typedef T & reference;
   typedef const T & const_reference;
+  typedef size_t size_type;
 
 private:
   typedef std::unordered_map<Key, T, Hash> large_table_type;

@@ -189,4 +189,8 @@ typedef obj_varkey<int32_t>  s32_varkey;
 typedef obj_varkey<uint64_t> u64_varkey;
 typedef obj_varkey<int64_t>  s64_varkey;
 
+inline bool operator==(const std::string& a, const varkey& b) {
+  return a == b.str();
+}
+
 #endif /* _NDB_VARKEY_H_ */

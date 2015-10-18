@@ -135,6 +135,26 @@ namespace {
     }
     return oss.str();
   }
+
+  template <typename T, unsigned N, typename A>
+  inline bool is_small_set(const small_vector<T, N, A>& set) {
+    return set.capacity() <= set.small_capacity;
+  }
+
+  template <typename T, size_t SS>
+  inline bool is_small_set(const static_vector<T, SS>& set) {
+    return set.is_small_type();
+  }
+
+  template <typename K, typename T, size_t SS, typename H>
+  inline bool is_small_set(const small_unordered_map<K, T, SS, H>& set) {
+    return set.is_small_type();
+  }
+
+  template <typename K, typename T, size_t SS, typename H>
+  inline bool is_small_set(const static_unordered_map<K, T, SS, H>& set) {
+    return set.is_small_type();
+  }
 }
 
 template <template <typename> class Protocol, typename Traits>
@@ -175,16 +195,16 @@ transaction<Protocol, Traits>::get_txn_counters() const
   std::map<std::string, uint64_t> ret;
 
   // max_read_set_size
-  ret["read_set_size"] = read_set.size();;
-  ret["read_set_is_large?"] = !read_set.is_small_type();
+  ret["read_set_size"] = read_set.size();
+  ret["read_set_is_large?"] = !is_small_set(read_set);
 
   // max_absent_set_size
   ret["absent_set_size"] = absent_set.size();
-  ret["absent_set_is_large?"] = !absent_set.is_small_type();
+  ret["absent_set_is_large?"] = !is_small_set(absent_set);
 
   // max_write_set_size
   ret["write_set_size"] = write_set.size();
-  ret["write_set_is_large?"] = !write_set.is_small_type();
+  ret["write_set_is_large?"] = !is_small_set(write_set);
 
   return ret;
 }
@@ -290,7 +310,7 @@ transaction<Protocol, Traits>::commit(bool doThrow)
             static std::string probe6_name(
               std::string(__PRETTY_FUNCTION__) + std::string(":sort_write_nodes:")));
         ANON_REGION(probe6_name.c_str(), &transaction_base::g_txn_commit_probe6_cg);
-        write_dbtuples.sort(); // in-place
+        std::sort(write_dbtuples.begin(), write_dbtuples.end()); // in-place
       }
       typename dbtuple_write_info_vec::iterator it     = write_dbtuples.begin();
       typename dbtuple_write_info_vec::iterator it_end = write_dbtuples.end();

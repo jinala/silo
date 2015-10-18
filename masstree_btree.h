@@ -22,7 +22,6 @@
 #include "amd64.h"
 #include "rcu.h"
 #include "util.h"
-#include "small_vector.h"
 #include "ownership_checker.h"
 
 #include "masstree/masstree_scan.hh"

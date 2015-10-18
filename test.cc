@@ -12,7 +12,7 @@
 #include "txn.h"
 #include "txn_btree.h"
 #include "varint.h"
-#include "small_vector.h"
+#include "masstree/small_vector.hh"
 #include "static_vector.h"
 #include "small_unordered_map.h"
 #include "static_unordered_map.h"
@@ -441,7 +441,7 @@ Test()
 
   {
     for (int iter = 0; iter < 10; iter++) {
-      small_vector<foo> v;
+      small_vector<foo, 128> v;
       for (int i = 0; i < 20; i++) {
         v.push_back(foo(i, i + 1, i + 2, i + 3));
         ALWAYS_ASSERT(v.back().a == i);
@@ -463,7 +463,7 @@ Test()
   }
 
   {
-    small_vector<int> v;
+    small_vector<int, 8> v;
     v.push_back(10);
     v.push_back(2);
     v.push_back(5);
@@ -472,14 +472,14 @@ Test()
     v.push_back(100);
     sort(v.begin(), v.end());
 
-    small_vector<int> v1;
+    small_vector<int, 8> v1;
     v1.push_back(10);
     v1.push_back(2);
     v1.push_back(5);
     v1.push_back(7);
     v1.push_back(3);
     v1.push_back(100);
-    v1.sort();
+    sort(v1.begin(), v1.end());
 
     vector<int> stl_v;
     stl_v.push_back(10);
@@ -511,7 +511,7 @@ Test()
     v1.push_back(7);
     v1.push_back(3);
     v1.push_back(100);
-    v1.sort();
+    sort(v1.begin(), v1.end());
 
     vector<int> stl_v;
     stl_v.push_back(10);
@@ -528,7 +528,7 @@ Test()
 
   {
     fast_random r(29395);
-    small_vector< pair<uint32_t, uint32_t> > v;
+    small_vector< pair<uint32_t, uint32_t>, 128 > v;
     vector< pair<uint32_t, uint32_t> > stl_v;
     for (size_t i = 0; i < 48; i++) {
       uint32_t x = r.next();

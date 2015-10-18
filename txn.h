@@ -35,6 +35,7 @@
 #include "tuple.h"
 #include "scopedperf.hh"
 #include "marked_ptr.h"
+#include "masstree/small_vector.hh"
 
 // forward decl
 template <template <typename> class Transaction, typename P>

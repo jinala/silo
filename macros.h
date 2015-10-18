@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <stdexcept>
+#include <iostream>
 
 /** options */
 //#define TUPLE_PREFETCH
@@ -73,6 +74,16 @@
 #else
   #define ALWAYS_ASSERT(expr) assert((expr))
 #endif /* NDEBUG */
+
+template <typename A, typename B>
+void always_assert_eq(const A& a, const B& b, const char* file, int line) {
+  if (!(a == b)) {
+    std::cerr << file << ":" << line << ": " << a << " != " << b << "\n";
+    abort();
+  }
+}
+
+#define ALWAYS_ASSERT_EQ(a, b) always_assert_eq((a), (b), __FILE__, __LINE__)
 
 #define ARRAY_NELEMS(a) (sizeof(a)/sizeof((a)[0]))
 

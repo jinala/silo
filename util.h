@@ -19,7 +19,7 @@
 #include <cxxabi.h>
 
 #include "macros.h"
-#include "small_vector.h"
+#include "masstree/small_vector.hh"
 
 namespace util {
 

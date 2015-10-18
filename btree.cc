@@ -320,7 +320,7 @@ test6()
   for (size_t i = 0; i < nkeys; i++)
     btr.insert(u64_varkey(i), (typename testing_concurrent_btree::value_type) i);
   btr.invariant_checker();
-  ALWAYS_ASSERT(btr.size() == nkeys);
+  ALWAYS_ASSERT_EQ(btr.size(), nkeys);
 
   using namespace test6_ns;
 
@@ -328,10 +328,9 @@ test6()
   scan_callback cb(&data);
   u64_varkey max_key(600);
   btr.search_range(u64_varkey(500), &max_key, cb);
-  ALWAYS_ASSERT(data.size() == 100);
+  ALWAYS_ASSERT_EQ(data.size(), 100U);
   for (size_t i = 0; i < 100; i++) {
-    const varkey lhs(data[i].first), rhs(u64_varkey(500 + i));
-    ALWAYS_ASSERT(lhs == rhs);
+    ALWAYS_ASSERT_EQ(data[i].first, u64_varkey(500 + i));
     ALWAYS_ASSERT(data[i].second == (typename testing_concurrent_btree::value_type) (500 + i));
   }
 
